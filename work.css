@@ -20,6 +20,16 @@
 .work-column { display: grid; align-content: start; gap: calc(64 * var(--u)); min-width: 0; }
 .work-art { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: #f7f7f7; }
 .work-art img { position: absolute; display: block; }
+.work-filter-defs { position: absolute; pointer-events: none; }
+
+@media (any-hover: hover) {
+  .work-art:not(.mask-active):hover > img:first-child {
+    filter: url("#work-thumbnail-bloom");
+  }
+}
+.work-link:focus-visible .work-art:not(.mask-active) > img:first-child {
+  filter: url("#work-thumbnail-bloom");
+}
 .work-square { aspect-ratio: 1; }
 .work-tall { aspect-ratio: 2 / 3; }
 .work-fica img { width: 100%; height: 100.67%; object-fit: cover; }
