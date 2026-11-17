@@ -1,0 +1,61 @@
+.work-page { scroll-snap-type: none; }
+.work-page .header .mask { position: relative; }
+.work-menu-icon {
+  position: absolute;
+  right: var(--gutter);
+  width: calc(20 * var(--u));
+  height: calc(20 * var(--u));
+  pointer-events: none;
+}
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(20 * var(--u));
+  padding: calc(124 * var(--u)) var(--gutter) calc(375 * var(--u));
+}
+.work-column { display: grid; align-content: start; gap: calc(64 * var(--u)); min-width: 0; }
+.work-art { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: #f7f7f7; }
+.work-art img { position: absolute; display: block; }
+.work-square { aspect-ratio: 1; }
+.work-tall { aspect-ratio: 2 / 3; }
+.work-fica img { width: 100%; height: 100.67%; object-fit: cover; }
+.work-chak { aspect-ratio: 4 / 5; background: #f0f0f3; }
+.work-chak.hero-image img {
+  width: 115%;
+  height: auto;
+  left: -7.5%;
+  top: 54%;
+  transform: translateY(-50%);
+}
+.work-icoco img {
+  width: 149.43%;
+  left: 50%;
+  top: 57.25%;
+  transform: translate(-50%, -50%) rotate(13.19deg);
+}
+.work-polo { aspect-ratio: 600 / 795.612; background: #fff; }
+.polo-photo { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.polo-emblem { left: 40.33%; top: 38.06%; width: 19.35%; height: 13.84%; object-fit: cover; }
+.polo-logotype { position: absolute; left: 31.5%; top: 51.9%; width: 37%; }
+.polo-logotype img { position: static; width: 100%; }
+.polo-logotype .polo-vector { position: absolute; left: 10.48%; top: 38.09%; width: 4.76%; }
+.work-polo p {
+  position: absolute;
+  top: 58.57%;
+  right: 33.5%;
+  color: #e2d7c8;
+  font-size: calc(19.592 * var(--u));
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.work-card figcaption { display: flex; justify-content: space-between; gap: .5em; margin-top: calc(12 * var(--u)); letter-spacing: -.02em; }
+.work-page footer { font-family: Satoshi, sans-serif; font-weight: 500; font-style: italic; letter-spacing: -.02em; }
+
+@media (max-width: 700px) {
+  .work-grid { grid-template-columns: 1fr; padding-top: 80px; padding-bottom: 96px; gap: 36px; }
+  .work-column { display: contents; }
+  .work-link { grid-row: 2; }
+  .work-column:nth-child(3) > :first-child { grid-row: 3; }
+  .work-polo p { font-size: clamp(12px, 3vw, 20px); }
+}
