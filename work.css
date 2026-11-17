@@ -20,16 +20,23 @@
 .work-column { display: grid; align-content: start; gap: calc(64 * var(--u)); min-width: 0; }
 .work-art { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: #f7f7f7; }
 .work-art img { position: absolute; display: block; }
-.work-filter-defs { position: absolute; pointer-events: none; }
+/* Scale after each image's existing crop and alignment transforms. */
+.work-art > img:first-child {
+  transform: scale(var(--thumbnail-scale, 1));
+}
 
-@media (any-hover: hover) {
-  .work-art:not(.mask-active):hover > img:first-child {
-    filter: url("#work-thumbnail-bloom");
+@media (prefers-reduced-motion: no-preference) {
+  .work-art > img:first-child { transition: transform 300ms ease-out; }
+
+  @media (any-hover: hover) {
+    .work-art:not(.mask-active):hover > img:first-child { --thumbnail-scale: 1.06; }
+  }
+
+  .work-link:focus-visible .work-art:not(.mask-active) > img:first-child {
+    --thumbnail-scale: 1.06;
   }
 }
-.work-link:focus-visible .work-art:not(.mask-active) > img:first-child {
-  filter: url("#work-thumbnail-bloom");
-}
+
 .work-square { aspect-ratio: 1; }
 .work-tall { aspect-ratio: 2 / 3; }
 .work-fica img { width: 100%; height: 100.67%; object-fit: cover; }
@@ -39,13 +46,13 @@
   height: auto;
   left: -7.5%;
   top: 54%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(var(--thumbnail-scale, 1));
 }
 .work-icoco img {
   width: 149.43%;
   left: 50%;
   top: 57.25%;
-  transform: translate(-50%, -50%) rotate(13.19deg);
+  transform: translate(-50%, -50%) rotate(13.19deg) scale(var(--thumbnail-scale, 1));
 }
 .work-polo { aspect-ratio: 600 / 795.612; background: #fff; }
 .polo-photo { inset: 0; width: 100%; height: 100%; object-fit: cover; }

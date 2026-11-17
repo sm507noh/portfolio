@@ -11,26 +11,6 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-<svg class="work-filter-defs" width="0" height="0" aria-hidden="true">
-  <defs>
-    <filter id="work-thumbnail-bloom" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="matrix"
-        values="0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0 0
-                0.2126 0.7152 0.0722 0 0"/>
-      <feComponentTransfer result="highlights">
-        <feFuncA type="linear" slope="3" intercept="-1.65"/>
-      </feComponentTransfer>
-      <feComposite in="SourceGraphic" in2="highlights" operator="in"/>
-      <feGaussianBlur stdDeviation="9"/>
-      <feComponentTransfer result="glow">
-        <feFuncA type="linear" slope="0.38"/>
-      </feComponentTransfer>
-      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
-    </filter>
-  </defs>
-</svg>
 <header class="header">
   <a class="identity" href="./">Noh Seungmin</a>
   <nav aria-label="포트폴리오"><a href="#work">Work</a><a href="about.html">About</a></nav>
