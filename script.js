@@ -1,6 +1,5 @@
 const mask = document.querySelector('.mask');
-const hero = document.querySelector('.hero-image');
-const image = hero.querySelector('img');
+const overlay = document.querySelector('.viewport-mask');
 
 for (const link of document.querySelectorAll('.header a')) {
   const label = link.textContent.trim();
@@ -17,7 +16,7 @@ for (const link of document.querySelectorAll('.header a')) {
   link.replaceChildren(roll);
 }
 
-const floatingMask = createFloatingCircleMask(hero, image);
+const floatingMask = overlay && createFloatingCircleMask(overlay);
 if (floatingMask) {
   mask.addEventListener('click', () => {
     const active = mask.getAttribute('aria-pressed') === 'false';

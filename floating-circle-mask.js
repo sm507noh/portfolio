@@ -1,9 +1,14 @@
-function createFloatingCircleMask(stage, image) {
-  const canvas = stage.querySelector('canvas');
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-
+function createFloatingCircleMask(overlay) {
+  const root = document.documentElement;
+  const cutouts = overlay.querySelector('mask g');
   const radius = 38;
+  const circles = Array.from({ length: 48 }, () => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', radius);
+    return circle;
+  });
+  cutouts.replaceChildren(...circles);
+
   const mouse = { x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0, active: false };
   let W = 0;
   let H = 0;
@@ -13,19 +18,15 @@ function createFloatingCircleMask(stage, image) {
   let animationId = 0;
 
   function resize() {
-    const { width, height } = stage.getBoundingClientRect();
+    const { width, height } = overlay.getBoundingClientRect();
     if (width === W && height === H && balls.length) return;
     W = width;
     H = height;
-    const scale = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.ceil(W * scale);
-    canvas.height = Math.ceil(H * scale);
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    balls = Array.from({ length: 48 }, makeBall);
+    balls = circles.map(makeBall);
   }
 
   function updatePointer(event) {
-    const bounds = stage.getBoundingClientRect();
+    const bounds = overlay.getBoundingClientRect();
     mouse.x = event.clientX - bounds.left;
     mouse.y = event.clientY - bounds.top;
     if (!mouse.active) {
@@ -175,44 +176,41 @@ function createFloatingCircleMask(stage, image) {
       if(!b.captured){b.driftAngle=Math.atan2(b.vy,b.vx);b.driftSpeed=Math.max(1.05,Math.min(3.1,Math.hypot(b.vx,b.vy)))}
      }
     }
-    ctx.clearRect(0, 0, W, H);
-    if (image.naturalWidth) {
-      const stageBounds = stage.getBoundingClientRect();
-      const imageBounds = image.getBoundingClientRect();
-      ctx.save();
-      ctx.beginPath();
-      for (const ball of balls) {
-        ctx.moveTo(ball.x + radius, ball.y);
-        ctx.arc(ball.x, ball.y, radius, 0, Math.PI * 2);
-      }
-      ctx.clip();
-      ctx.drawImage(image, imageBounds.left - stageBounds.left, imageBounds.top - stageBounds.top,
-        imageBounds.width, imageBounds.height);
-      ctx.restore();
-    }
+    balls.forEach((ball, index) => {
+      circles[index].setAttribute('cx', ball.x);
+      circles[index].setAttribute('cy', ball.y);
+    });
     animationId = requestAnimationFrame(frame);
   }
 
   const resizeObserver = new ResizeObserver(resize);
-  const pointerEvents = ['pointerenter', 'pointermove', 'pointerdown'];
-  const releaseEvents = ['pointerleave', 'pointercancel'];
+  const pointerEvents = ['pointermove', 'pointerdown'];
+  function releaseTouch(event) {
+    if (event.pointerType !== 'mouse') releasePointer();
+  }
 
   return {
     start() {
-      stage.classList.add('mask-active');
+      root.classList.add('mask-active');
       resize();
-      resizeObserver.observe(stage);
-      pointerEvents.forEach(type => stage.addEventListener(type, updatePointer));
-      releaseEvents.forEach(type => stage.addEventListener(type, releasePointer));
+      resizeObserver.observe(overlay);
+      pointerEvents.forEach(type => window.addEventListener(type, updatePointer));
+      root.addEventListener('pointerleave', releasePointer);
+      window.addEventListener('pointercancel', releasePointer);
+      window.addEventListener('pointerup', releaseTouch);
+      window.addEventListener('blur', releasePointer);
       last = performance.now();
       animationId = requestAnimationFrame(frame);
     },
     stop() {
-      stage.classList.remove('mask-active');
+      root.classList.remove('mask-active');
       cancelAnimationFrame(animationId);
       resizeObserver.disconnect();
-      pointerEvents.forEach(type => stage.removeEventListener(type, updatePointer));
-      releaseEvents.forEach(type => stage.removeEventListener(type, releasePointer));
+      pointerEvents.forEach(type => window.removeEventListener(type, updatePointer));
+      root.removeEventListener('pointerleave', releasePointer);
+      window.removeEventListener('pointercancel', releasePointer);
+      window.removeEventListener('pointerup', releaseTouch);
+      window.removeEventListener('blur', releasePointer);
       releasePointer();
       balls = [];
       time = 0;

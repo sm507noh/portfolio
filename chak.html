@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="노승민 포트폴리오 — 선행의 즐거움을 발견하는 선행 챌린지 서비스, 착!">
 <title>착! (Chak!) — Noh Seungmin</title>
-<link rel="stylesheet" href="style.css">
-<script src="floating-circle-mask.js" defer></script>
-<script src="script.js" defer></script>
+<link rel="stylesheet" href="style.css?v=viewport-mask">
+<script src="floating-circle-mask.js?v=viewport-mask" defer></script>
+<script src="script.js?v=viewport-mask" defer></script>
 </head>
 <body>
 <header class="header">
@@ -30,7 +30,7 @@
         한 사람의 실천이 다음 사람의 참여로 이어지는 일상을 만들어갑니다.</p>
       <a class="more" href="https://story.chak.today">SEE MORE →</a>
     </div>
-    <figure class="hero-image"><img src="assets/chak-hero.png" width="1020" height="1020" alt="착! 캠페인 웹앱의 시작 화면과 분홍색 스플래시 화면을 보여주는 두 대의 스마트폰"><canvas class="mask-canvas" aria-hidden="true"></canvas></figure>
+    <figure class="hero-image"><img src="assets/chak-hero.png" width="1020" height="1020" alt="착! 캠페인 웹앱의 시작 화면과 분홍색 스플래시 화면을 보여주는 두 대의 스마트폰"></figure>
   </section>
   <div class="details" id="frame-real">
     <dl class="meta">
@@ -54,5 +54,14 @@
   </div>
 </main>
 <footer><a href="https://www.instagram.com/nxxmtttttt/">@nxxmtttttt</a><a href="mailto:sm507noh@gmail.com">sm507noh@gmail.com</a><span>© 2026</span></footer>
+<svg class="viewport-mask" width="100%" height="100%" aria-hidden="true" focusable="false">
+  <defs>
+    <mask id="viewport-mask-cutouts" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" mask-type="luminance">
+      <rect width="100%" height="100%" fill="white"></rect>
+      <g fill="black"></g>
+    </mask>
+  </defs>
+  <rect width="100%" height="100%" fill="white" mask="url(#viewport-mask-cutouts)"></rect>
+</svg>
 </body>
 </html>
