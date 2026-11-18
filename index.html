@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="노승민 디자인 포트폴리오">
-  <title>Work — Noh Seungmin</title>
+  <title>Noh Seungmin — Portfolio</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="work.css">
   <script src="floating-circle-mask.js" defer></script>
@@ -12,12 +12,19 @@
 </head>
 <body>
 <header class="header">
-  <a class="identity" href="./">Noh Seungmin</a>
-  <nav aria-label="포트폴리오"><a href="#work">Work</a><a href="about.html">About</a></nav>
+  <a class="identity" href="#home">Noh Seungmin</a>
+  <nav aria-label="포트폴리오"><a href="#work">Work</a><a href="#about">About</a></nav>
   <img class="work-menu-icon" src="assets/home/74cdf.svg" alt="" width="20" height="20">
   <button class="mask" type="button" aria-label="Mask" aria-pressed="false"></button>
 </header>
-<main class="work-grid" id="work" aria-label="Work">
+<main>
+  <section class="portfolio-home" id="home" aria-label="Home">
+    <img class="home-shape home-shape-pair" src="assets/home/dabb4.svg" width="731" height="664" alt="">
+    <img class="home-shape home-shape-right" src="assets/home/5b144.svg" width="450" height="450" alt="">
+    <img class="home-shape home-shape-left" src="assets/home/7d46f.svg" width="450" height="450" alt="">
+    <img class="home-shape home-shape-bottom" src="assets/home/7d46f.svg" width="450" height="450" alt="">
+  </section>
+  <section class="work-grid" id="work" aria-label="Work">
   <div class="work-column">
     <figure class="work-card">
       <div class="work-art work-fica"><img src="assets/home/76fbb.png" alt="FICA 소방관 전술 장비와 태블릿 UI"></div>
@@ -73,6 +80,27 @@
       <figcaption><span>Mile marker</span><span>[08]</span></figcaption>
     </figure>
   </div>
+  </section>
+  <section class="portfolio-about" id="about" aria-labelledby="about-title">
+    <div class="about-intro">
+      <h2 id="about-title" class="about-title">(About)</h2>
+      <p class="about-statement">디자인의 기준을<br><span>끊임없이 검증하는 사람</span></p>
+      <p class="about-description">기획부터 디자인, 프로그래밍까지 전 과정을 논리적으로 연결하고, 사용자 관점에서 타당한 근거가 있는지를 판단합니다. 그 과정에서 여러 가능성 사이에서 흔들리기도 하지만, 결국 기준을 세우고 결과물의 완성도를 높이는 데 집중합니다.</p>
+      <img class="about-portrait" src="assets/home/portrait.jpg" width="600" height="750" alt="노승민 프로필 사진" loading="lazy">
+    </div>
+    <div class="about-profile">
+      <dl>
+        <div><dt>이름</dt><dd>노승민 · NOH SEUNGMIN</dd></div>
+        <div><dt>생일</dt><dd>2004.05.07</dd></div>
+        <div><dt>연락처</dt><dd><a href="mailto:sm507noh@gmail.com">sm507noh@gmail.com</a></dd></div>
+        <div><dt>학력사항</dt><dd>2023.02 성복고등학교 졸업<br>2025.03 계원예술대학교 입학<br>2027.02 계원예술대학교 졸업 예정</dd></div>
+      </dl>
+      <dl>
+        <div><dt>경력 및 교내활동</dt><dd>2025.03 – 2026.10 수지 영원한 미소 보조강사<br>2025.03 신입생 우수장학</dd></div>
+        <div><dt>수상경력</dt><dd>2026 커뮤니케이션 디자인 국제 어워드 입선</dd></div>
+      </dl>
+    </div>
+  </section>
 </main>
 <footer><a href="https://www.instagram.com/nxxmtttttt/">@nxxmtttttt</a><a href="mailto:sm507noh@gmail.com">sm507noh@gmail.com</a><span>© 2026</span></footer>
 </body>

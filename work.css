@@ -15,7 +15,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: calc(20 * var(--u));
-  padding: calc(124 * var(--u)) var(--gutter) calc(390 * var(--u));
+  padding: calc(124 * var(--u)) var(--gutter) calc(450 * var(--u));
 }
 .work-column { display: grid; align-content: start; gap: calc(64 * var(--u)); min-width: 0; }
 .work-art { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: #f7f7f7; }
@@ -79,4 +79,88 @@
   .work-link { grid-row: 2; }
   .work-column:nth-child(3) > :first-child { grid-row: 3; }
   .work-polo p { font-size: clamp(12px, 3vw, 20px); }
+}
+
+.work-page main { padding-top: 0; }
+.work-page .header { background: #fff; }
+
+.portfolio-home {
+  position: relative;
+  height: calc(1380 * var(--u));
+  overflow: hidden;
+}
+.home-shape {
+  position: absolute;
+  display: block;
+  height: auto;
+  width: 23.4375%;
+  pointer-events: none;
+}
+.home-shape-pair { left: 21.40625%; top: 22.54%; width: 38.073%; }
+.home-shape-right { left: 69.0625%; top: 13.99%; }
+.home-shape-left { left: 11.875%; top: 80.29%; }
+.home-shape-bottom { left: 65.46875%; top: 96.59%; }
+
+.portfolio-about {
+  padding: calc(124 * var(--u)) var(--gutter) calc(224 * var(--u));
+  scroll-margin-top: var(--header-height);
+}
+.about-intro {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: calc(20 * var(--u));
+  align-items: end;
+}
+.about-title { grid-column: 1; grid-row: 2; font: 700 calc(40 * var(--u))/1.38 Reatic, sans-serif; }
+.about-statement {
+  grid-column: 2 / -1;
+  grid-row: 1;
+  font-size: calc(64 * var(--u));
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -.04em;
+}
+.about-statement span { margin-inline-start: calc(160 * var(--u)); }
+.about-description {
+  grid-column: 3;
+  grid-row: 2;
+  max-width: calc(452 * var(--u));
+  font: calc(20 * var(--u))/1.5 Satoshi, "Apple SD Gothic Neo", sans-serif;
+  letter-spacing: -.02em;
+}
+.about-portrait {
+  display: block;
+  grid-column: 2;
+  grid-row: 3;
+  width: 100%;
+  height: auto;
+  margin-top: calc(48 * var(--u));
+}
+.about-profile {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(20 * var(--u));
+  margin-top: calc(200 * var(--u));
+  margin-left: calc(310 * var(--u));
+}
+.about-profile dl { display: grid; align-content: start; gap: .5em; }
+.about-profile dl > div { display: grid; grid-template-columns: calc(155 * var(--u)) 1fr; }
+.about-profile dd { overflow-wrap: anywhere; }
+.about-profile dd a:hover { text-decoration: underline; }
+
+@media (max-width: 700px) {
+  .portfolio-home { height: max(72svh, 260px); }
+  .home-shape-pair { left: 12%; top: 34%; width: 49%; }
+  .home-shape-right { left: 65%; top: 23%; width: 30%; }
+  .home-shape-left { top: 83%; width: 30%; }
+  .portfolio-about { padding-block: 48px 96px; }
+  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .about-intro > * { grid-column: auto; grid-row: auto; }
+  .about-title { font-size: 30px; }
+  .about-statement { font-size: clamp(26px, 6vw, 40px); }
+  .about-statement span { margin-inline-start: 0; }
+  .about-description { font-size: 16px; }
+  .about-portrait { max-width: 420px; margin-top: 0; }
+  .about-profile { grid-template-columns: 1fr; gap: 24px; margin: 56px 0 0; }
+  .about-profile dl > div { grid-template-columns: minmax(64px, 26%) 1fr; gap: 12px; }
 }

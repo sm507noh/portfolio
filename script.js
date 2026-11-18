@@ -26,12 +26,3 @@ if (floatingMask) {
     mask.setAttribute('aria-pressed', String(active));
   });
 }
-
-function openAboutFromOriginalLink() {
-  if (document.documentElement.classList.contains("work-page") && location.hash === "#about") {
-    location.replace("about.html");
-  }
-}
-
-window.addEventListener("hashchange", openAboutFromOriginalLink);
-openAboutFromOriginalLink();
