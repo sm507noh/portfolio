@@ -1,7 +1,7 @@
 function createFloatingCircleMask(overlay) {
   const root = document.documentElement;
   const cutouts = overlay.querySelector('mask g');
-  const radius = 60.8;
+  const radius = 121.6;
   const circles = Array.from({ length: 48 }, () => {
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('r', radius);
@@ -51,7 +51,7 @@ function createFloatingCircleMask(overlay) {
     captured:false};
   }
   // Dense hexagonal spiral: every new circle overlaps existing neighbors.
-  // Step is intentionally smaller than the circle radius (60.8px), so even
+  // Step is intentionally smaller than the circle radius (121.6px), so even
   // transient jitter cannot create an uncovered center between three circles.
   function compactSlot(n){
    if(n===0)return {x:0,y:0};
@@ -62,7 +62,7 @@ function createFloatingCircleMask(overlay) {
    let side=Math.floor(remaining/ring),step=remaining%ring;
    for(let i=0;i<side;i++){q+=dirs[i][0]*ring;r+=dirs[i][1]*ring}
    q+=dirs[side][0]*step;r+=dirs[side][1]*step;
-   const spacing=43; // diameter 121.6: deep overlap, no central holes
+   const spacing=43; // diameter 243.2: deep overlap, no central holes
    return {x:spacing*(q+r/2),y:spacing*Math.sqrt(3)/2*r};
   }
   function frame(now){
