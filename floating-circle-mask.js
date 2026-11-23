@@ -2,7 +2,7 @@ function createFloatingCircleMask(overlay) {
   const root = document.documentElement;
   const cutouts = overlay.querySelector('mask g');
   const radius = 121.6;
-  const circles = Array.from({ length: 48 }, () => {
+  const circles = Array.from({ length: 32 }, () => {
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('r', radius);
     return circle;
