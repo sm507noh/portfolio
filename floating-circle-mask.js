@@ -62,7 +62,7 @@ function createFloatingCircleMask(overlay) {
    let side=Math.floor(remaining/ring),step=remaining%ring;
    for(let i=0;i<side;i++){q+=dirs[i][0]*ring;r+=dirs[i][1]*ring}
    q+=dirs[side][0]*step;r+=dirs[side][1]*step;
-   const spacing=43; // diameter 243.2: deep overlap, no central holes
+   const spacing=86; // diameter 243.2: deep overlap, no central holes
    return {x:spacing*(q+r/2),y:spacing*Math.sqrt(3)/2*r};
   }
   function frame(now){
