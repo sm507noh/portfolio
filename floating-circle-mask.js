@@ -44,15 +44,19 @@ function createFloatingCircleMask(overlay) {
     driftAngle:ang,driftSpeed:speed,phase:Math.random()*Math.PI*2,
     captured:false};
   }
-  // Overlapping spiral positions let captured circles grow into a round cluster.
+  // Each activation uses a different soft, asymmetric cluster outline.
+  let clusterPhase = Math.random() * Math.PI * 2;
   function compactSlot(n) {
     if (n === 0) return { x: 0, y: 0 };
-    // A golden-angle spiral fills a round silhouette without straight rows.
-    const angle = n * Math.PI * (3 - Math.sqrt(5)) + Math.sin(n * 1.7) * 0.08;
-    const distance = radius * 0.68 * Math.sqrt(n) * (1 + Math.sin(n * 2.3) * 0.025);
+    const angle = n * Math.PI * (3 - Math.sqrt(5)) + clusterPhase;
+    const distance = radius * 0.68 * Math.sqrt(n);
+    const outline = 1 + 0.2 * Math.sin(angle * 2 + time * 0.32)
+      + 0.13 * Math.cos(angle * 3 - clusterPhase + time * 0.21);
+    const x = Math.cos(angle) * distance * outline;
+    const y = Math.sin(angle) * distance * outline;
     return {
-      x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance,
+      x: x + radius * 0.3 * Math.sin(y / (radius * 2) + time * 0.27),
+      y: y + radius * 0.24 * Math.sin(x / (radius * 2) - time * 0.23),
     };
   }
   function frame(now){
@@ -191,6 +195,7 @@ function createFloatingCircleMask(overlay) {
 
   return {
     start() {
+      clusterPhase = Math.random() * Math.PI * 2;
       root.classList.add('mask-active');
       resize();
       resizeObserver.observe(overlay);
