@@ -44,18 +44,16 @@ function createFloatingCircleMask(overlay) {
     driftAngle:ang,driftSpeed:speed,phase:Math.random()*Math.PI*2,
     captured:false};
   }
-  // Overlapping hexagonal rings let every captured circle expand the cluster.
-  function compactSlot(n){
-   if(n===0)return {x:0,y:0};
-   let remaining=n-1,ring=1;
-   while(remaining>=6*ring){remaining-=6*ring;ring++}
-   let q=ring,r=0;
-   const dirs=[[-1,1],[-1,0],[0,-1],[1,-1],[1,0],[0,1]];
-   let side=Math.floor(remaining/ring),step=remaining%ring;
-   for(let i=0;i<side;i++){q+=dirs[i][0]*ring;r+=dirs[i][1]*ring}
-   q+=dirs[side][0]*step;r+=dirs[side][1]*step;
-   const spacing=radius*1.25; // Overlap keeps adjacent rings connected.
-   return {x:spacing*(q+r/2),y:spacing*Math.sqrt(3)/2*r};
+  // Overlapping spiral positions let captured circles grow into a round cluster.
+  function compactSlot(n) {
+    if (n === 0) return { x: 0, y: 0 };
+    // A golden-angle spiral fills a round silhouette without straight rows.
+    const angle = n * Math.PI * (3 - Math.sqrt(5)) + Math.sin(n * 1.7) * 0.08;
+    const distance = radius * 0.68 * Math.sqrt(n) * (1 + Math.sin(n * 2.3) * 0.025);
+    return {
+      x: Math.cos(angle) * distance,
+      y: Math.sin(angle) * distance,
+    };
   }
   function frame(now){
    const dt=Math.min((now-last)/16.67,2);last=now;time+=.012*dt;
@@ -97,9 +95,9 @@ function createFloatingCircleMask(overlay) {
      }
     }
     if(b.captured){
-     // Tiny collective breathing, never enough to break the overlapping coverage.
-     const tx=mouse.x+b.slotX+Math.sin(time*.8+b.phase)*.65;
-     const ty=mouse.y+b.slotY+Math.cos(time*.8+b.phase)*.65;
+     // Gentle independent movement softens the outline while circles overlap.
+     const tx=mouse.x+b.slotX+Math.sin(time*.8+b.phase)*3;
+     const ty=mouse.y+b.slotY+Math.cos(time*.8+b.phase)*3;
      const pull=.12+power*.14;
      b.vx+=(tx-b.x)*pull*dt;b.vy+=(ty-b.y)*pull*dt;
      b.vx*=Math.pow(.82,dt);b.vy*=Math.pow(.82,dt);
