@@ -63,6 +63,10 @@ h1 { display: flex; gap: calc(16 * var(--u)); align-items: center; font: 700 cal
   -webkit-mask-size: 100% 100%;
 }
 .mask-active .viewport-mask { display: block; }
+html.mask-active .header {
+  background: transparent;
+  z-index: 4;
+}
 .mask[aria-pressed="true"] { background: #000000; }
 .details { position: relative; min-height: max(100dvh, calc(4339 * var(--u))); padding-top: calc(836 * var(--u)); display: grid; grid-template-rows: calc(352 * var(--u)) auto; align-content: start; scroll-snap-align: start; scroll-snap-stop: always; }
 .detail { display: grid; grid-template-columns: calc(310 * var(--u)) minmax(0, calc(755 * var(--u))); margin-left: var(--detail-start); scroll-margin-top: calc(var(--header-height) + 24px); }
