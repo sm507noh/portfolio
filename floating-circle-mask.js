@@ -1,13 +1,7 @@
 function createFloatingCircleMask(overlay) {
   const root = document.documentElement;
-  const cutouts = overlay.querySelector('mask g');
   const radius = 121.6;
-  const circles = Array.from({ length: 32 }, () => {
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('r', radius);
-    return circle;
-  });
-  cutouts.replaceChildren(...circles);
+  const circleCount = 32;
 
   const mouse = { x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0, active: false };
   let W = 0;
@@ -22,7 +16,7 @@ function createFloatingCircleMask(overlay) {
     if (width === W && height === H && balls.length) return;
     W = width;
     H = height;
-    balls = circles.map(makeBall);
+    balls = Array.from({ length: circleCount }, makeBall);
   }
 
   function updatePointer(event) {
@@ -178,10 +172,16 @@ function createFloatingCircleMask(overlay) {
       if(!b.captured){b.driftAngle=Math.atan2(b.vy,b.vx);b.driftSpeed=Math.max(1.05,Math.min(3.1,Math.hypot(b.vx,b.vy)))}
      }
     }
-    balls.forEach((ball, index) => {
-      circles[index].setAttribute('cx', ball.x);
-      circles[index].setAttribute('cy', ball.y);
-    });
+    const holes = balls.map(ball =>
+      '<circle cx="' + ball.x.toFixed(1) + '" cy="' + ball.y.toFixed(1) + '" r="' + radius + '" fill="black"/>'
+    ).join('');
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<defs><mask id="holes" maskUnits="userSpaceOnUse" x="0" y="0" width="' + W + '" height="' + H + '" style="mask-type:luminance">' +
+      '<rect width="100%" height="100%" fill="white"/>' + holes +
+      '</mask></defs><rect width="100%" height="100%" fill="white" mask="url(#holes)"/></svg>';
+    const maskImage = 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+    overlay.style.maskImage = maskImage;
+    overlay.style.webkitMaskImage = maskImage;
     animationId = requestAnimationFrame(frame);
   }
 

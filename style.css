@@ -54,6 +54,12 @@ h1 { display: flex; gap: calc(16 * var(--u)); align-items: center; font: 700 cal
   inset: 0;
   z-index: 2;
   pointer-events: none;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
 }
 .mask-active .viewport-mask { display: block; }
 .mask[aria-pressed="true"] { background: #000000; }
