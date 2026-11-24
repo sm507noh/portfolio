@@ -50,9 +50,7 @@ function createFloatingCircleMask(overlay) {
     driftAngle:ang,driftSpeed:speed,phase:Math.random()*Math.PI*2,
     captured:false};
   }
-  // Dense hexagonal spiral: every new circle overlaps existing neighbors.
-  // Step is intentionally smaller than the circle radius (121.6px), so even
-  // transient jitter cannot create an uncovered center between three circles.
+  // Overlapping hexagonal rings let every captured circle expand the cluster.
   function compactSlot(n){
    if(n===0)return {x:0,y:0};
    let remaining=n-1,ring=1;
@@ -62,7 +60,7 @@ function createFloatingCircleMask(overlay) {
    let side=Math.floor(remaining/ring),step=remaining%ring;
    for(let i=0;i<side;i++){q+=dirs[i][0]*ring;r+=dirs[i][1]*ring}
    q+=dirs[side][0]*step;r+=dirs[side][1]*step;
-   const spacing=86; // diameter 243.2: deep overlap, no central holes
+   const spacing=radius*1.25; // Overlap keeps adjacent rings connected.
    return {x:spacing*(q+r/2),y:spacing*Math.sqrt(3)/2*r};
   }
   function frame(now){
@@ -70,7 +68,11 @@ function createFloatingCircleMask(overlay) {
    mouse.vx=mouse.active?(mouse.x-mouse.px)*.38+mouse.vx*.62:mouse.vx*.75;
    mouse.vy=mouse.active?(mouse.y-mouse.py)*.38+mouse.vy*.62:mouse.vy*.75;
    mouse.px=mouse.x;mouse.py=mouse.y;
-   const cursorSpeed=Math.hypot(mouse.vx,mouse.vy),reach=225,power=.78;
+   const cursorSpeed=Math.hypot(mouse.vx,mouse.vy),power=.78;
+   const clusterRadius=balls.reduce((extent,ball)=>ball.captured?Math.max(extent,ball.slotRadius||0):extent,0);
+   // Nearby circles can join the growing outer edge without crossing its center.
+   const captureDistance=clusterRadius+radius+70;
+   const reach=captureDistance+240;
    // Capture only the nearest eligible circle first; build the cluster outward.
    const candidates=mouse.active?balls.filter(b=>!b.captured).map(b=>({b,d:Math.hypot(mouse.x-b.x,mouse.y-b.y)})).filter(v=>v.d<reach).sort((a,b)=>a.d-b.d):[];
    const nearest=candidates.length?candidates[0].b:null;
@@ -84,11 +86,11 @@ function createFloatingCircleMask(overlay) {
     // Stronger field at the cursor, weaker at the edge; outer circles approach before attaching.
     if(mouse.active&&!b.captured&&dist<reach){
      const near=1-dist/reach;
-     const force=(.12+power*.42)*near*near;
+     const force=(.3+power*.7)*near*near;
      b.vx+=(dx/(dist||1))*force*dt;
      b.vy+=(dy/(dist||1))*force*dt;
      // The closest circle is attached first, rather than random distant circles.
-     if(b===nearest&&newCaptures<captureBudget&&dist<Math.min(105,reach*.58)){
+     if(b===nearest&&newCaptures<captureBudget&&dist<captureDistance){
       b.captured=true;newCaptures++;
       // Append the next overlapping slot to the cluster.
       const n=attached.length;
