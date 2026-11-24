@@ -44,19 +44,19 @@ function createFloatingCircleMask(overlay) {
     driftAngle:ang,driftSpeed:speed,phase:Math.random()*Math.PI*2,
     captured:false};
   }
-  // Each activation uses a different soft, asymmetric cluster outline.
+  // Each activation uses a soft, nearly circular cluster outline.
   let clusterPhase = Math.random() * Math.PI * 2;
   function compactSlot(n) {
     if (n === 0) return { x: 0, y: 0 };
     const angle = n * Math.PI * (3 - Math.sqrt(5)) + clusterPhase;
     const distance = radius * 0.68 * Math.sqrt(n);
-    const outline = 1 + 0.2 * Math.sin(angle * 2 + time * 0.32)
-      + 0.13 * Math.cos(angle * 3 - clusterPhase + time * 0.21);
+    const outline = 1 + 0.045 * Math.sin(angle * 2 + time * 0.32)
+      + 0.03 * Math.cos(angle * 3 - clusterPhase + time * 0.21);
     const x = Math.cos(angle) * distance * outline;
     const y = Math.sin(angle) * distance * outline;
     return {
-      x: x + radius * 0.3 * Math.sin(y / (radius * 2) + time * 0.27),
-      y: y + radius * 0.24 * Math.sin(x / (radius * 2) - time * 0.23),
+      x: x + radius * 0.08 * Math.sin(y / (radius * 2) + time * 0.27),
+      y: y + radius * 0.06 * Math.sin(x / (radius * 2) - time * 0.23),
     };
   }
   function frame(now){
