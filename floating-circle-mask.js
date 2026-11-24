@@ -1,7 +1,7 @@
 function createFloatingCircleMask(overlay) {
   const root = document.documentElement;
   const radius = 42;
-  const circleCount = 32;
+  const circleCount = 96;
 
   const mouse = { x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0, active: false };
   let W = 0;
