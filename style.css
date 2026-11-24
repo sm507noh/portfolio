@@ -54,6 +54,7 @@ h1 { display: flex; gap: calc(16 * var(--u)); align-items: center; font: 700 cal
   inset: 0;
   z-index: 2;
   pointer-events: none;
+  background: rgba(0, 0, 0, 0.16);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   mask-repeat: no-repeat;
