@@ -82,7 +82,13 @@
 }
 
 .work-page main { padding-top: 0; }
-.work-page .header { background: #fff; }
+.work-page:not(.mask-active) .header { background: #fff; }
+.work-page.mask-active .header {
+  background: none !important;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
 
 .portfolio-home {
   position: relative;

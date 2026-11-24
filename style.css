@@ -64,7 +64,7 @@ h1 { display: flex; gap: calc(16 * var(--u)); align-items: center; font: 700 cal
 }
 .mask-active .viewport-mask { display: block; }
 html.mask-active .header {
-  background: transparent;
+  background: none !important;
   z-index: 4;
 }
 .mask[aria-pressed="true"] { background: #000000; }
