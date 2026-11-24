@@ -68,32 +68,32 @@ function createFloatingCircleMask(overlay) {
    mouse.vx=mouse.active?(mouse.x-mouse.px)*.38+mouse.vx*.62:mouse.vx*.75;
    mouse.vy=mouse.active?(mouse.y-mouse.py)*.38+mouse.vy*.62:mouse.vy*.75;
    mouse.px=mouse.x;mouse.py=mouse.y;
-   const cursorSpeed=Math.hypot(mouse.vx,mouse.vy),power=.78;
+   const power=.78;
    const clusterRadius=balls.reduce((extent,ball)=>ball.captured?Math.max(extent,ball.slotRadius||0):extent,0);
    // Nearby circles can join the growing outer edge without crossing its center.
    const captureDistance=clusterRadius+radius+70;
    const reach=captureDistance+240;
    // Capture only the nearest eligible circle first; build the cluster outward.
    const candidates=mouse.active?balls.filter(b=>!b.captured).map(b=>({b,d:Math.hypot(mouse.x-b.x,mouse.y-b.y)})).filter(v=>v.d<reach).sort((a,b)=>a.d-b.d):[];
-   const nearest=candidates.length?candidates[0].b:null;
+   const nearest=new Set(candidates.slice(0,3).map(candidate=>candidate.b));
    // Repack after a circle drops away, so abandoned slots never leave holes.
    const attached=balls.filter(b=>b.captured).sort((a,b)=>a.captureOrder-b.captureOrder);
    attached.forEach((b,i)=>{const slot=compactSlot(i);b.slotX=slot.x;b.slotY=slot.y;b.slotRadius=Math.hypot(slot.x,slot.y)});
-   const captureBudget=1;
+   const captureBudget=3;
    let newCaptures=0;
    for(let i=0;i<balls.length;i++){
     const b=balls[i],dx=mouse.x-b.x,dy=mouse.y-b.y,dist=Math.hypot(dx,dy);
     // Stronger field at the cursor, weaker at the edge; outer circles approach before attaching.
     if(mouse.active&&!b.captured&&dist<reach){
      const near=1-dist/reach;
-     const force=(.3+power*.7)*near*near;
+     const force=(1.2+power*1.4)*(.2+.8*near*near);
      b.vx+=(dx/(dist||1))*force*dt;
      b.vy+=(dy/(dist||1))*force*dt;
      // The closest circle is attached first, rather than random distant circles.
-     if(b===nearest&&newCaptures<captureBudget&&dist<captureDistance){
+     if(nearest.has(b)&&newCaptures<captureBudget&&dist<captureDistance){
       b.captured=true;newCaptures++;
       // Append the next overlapping slot to the cluster.
-      const n=attached.length;
+      const n=attached.length+newCaptures-1;
       b.captureOrder=n;
       const slot=compactSlot(n);
       b.slotX=slot.x;b.slotY=slot.y;
@@ -106,13 +106,12 @@ function createFloatingCircleMask(overlay) {
      // Tiny collective breathing, never enough to break the overlapping coverage.
      const tx=mouse.x+b.slotX+Math.sin(time*.8+b.phase)*.65;
      const ty=mouse.y+b.slotY+Math.cos(time*.8+b.phase)*.65;
-     const pull=.075+power*.105;
+     const pull=.12+power*.14;
      b.vx+=(tx-b.x)*pull*dt;b.vy+=(ty-b.y)*pull*dt;
      b.vx*=Math.pow(.82,dt);b.vy*=Math.pow(.82,dt);
      b.x+=b.vx*dt;b.y+=b.vy*dt;
-     const lag=Math.hypot(b.x-mouse.x,b.y-mouse.y),tolerance=b.slotRadius+145+power*140;
-     const strain=Math.max(0,lag-tolerance)/110+Math.max(0,cursorSpeed-(14+power*26))/75;
-     if(!mouse.active||lag>tolerance+195||(strain>0&&Math.random()<strain*.035*dt)){
+     const targetLag=Math.hypot(b.x-tx,b.y-ty);
+     if(!mouse.active||targetLag>radius*5){
       b.captured=false;
       b.driftAngle=Math.atan2(b.vy,b.vx)+(Math.random()-.5)*.5;
       b.driftSpeed=1.05+Math.random()*2.05;
@@ -152,12 +151,13 @@ function createFloatingCircleMask(overlay) {
    }
    // Physical circles: equal masses, elastic impulse, and overlap correction.
     // Captured circles may overlap each other to preserve the continuous image mask.
-    const restitution=.88;
+    const restitution=.35;
     for(let i=0;i<balls.length;i++)for(let j=i+1;j<balls.length;j++){
      const a=balls[i],b=balls[j];
      if(a.captured&&b.captured)continue;
-     // A circle being pulled toward the cursor should not be bounced away by the cluster.
-     if(mouse.active && ((a.captured&&!b.captured&&Math.hypot(b.x-mouse.x,b.y-mouse.y)<reach)||(b.captured&&!a.captured&&Math.hypot(a.x-mouse.x,a.y-mouse.y)<reach)))continue;
+     // Attraction takes priority over collisions throughout the cursor's field.
+     if(mouse.active && (Math.hypot(a.x-mouse.x,a.y-mouse.y)<reach ||
+       Math.hypot(b.x-mouse.x,b.y-mouse.y)<reach))continue;
      let dx=b.x-a.x,dy=b.y-a.y,dist2=dx*dx+dy*dy;
      const minDist=radius*2;
      if(dist2>=minDist*minDist)continue;
